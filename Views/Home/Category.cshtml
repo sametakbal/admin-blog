@@ -1,0 +1,61 @@
+﻿@model IEnumerable<AdminBlog.Models.Category>
+@{
+    ViewData["Title"] = "Category";
+}
+
+<button type="button" onclick="$('#CategoryModal').modal('show')" class="btn btn-primary">Kategori Ekle</button>
+
+<table class="table table-hover">
+    <thead>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+            <th scope="row">@item.Id</th>
+            <td>@item.Name</td>
+            <td><a class="btn btn-danger" asp-route-id="@item.Id" asp-action="DeleteCategory">Sil</a>
+            <button type="button" onclick="updateForm(@item.Name)" >Güncelle</button> </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<div class="modal" id="CategoryModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Kategori :</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST" action="/Home/AddCategory" autocomplete="off">
+      <div class="modal-body">
+        <div class="form-group">
+            <input type="hidden" name="Id" class="form-control">
+            <input type="text" name="Name" class="form-control">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button id="deleteBtn" type="submit" class="btn btn-primary">Ekle</button>
+        <button id="updateBtn" type="submit" class="btn btn-primary">Güncelle</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+@section Scripts{
+  <script>
+
+    function updateForm(name){
+      console.log(name.toString());
+    }
+  </script>
+}
