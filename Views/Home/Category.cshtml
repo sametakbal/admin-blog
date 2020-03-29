@@ -18,10 +18,10 @@
             <th scope="row">@item.Id</th>
             <td>@item.Name</td>
             <td><a class="btn btn-danger" asp-route-id="@item.Id" asp-action="DeleteCategory">Sil</a>
-            <button type="button" onclick="updateForm(@item.Name)" >Güncelle</button> </td>
+            <button class="btn btn-secondary" onclick="updateForm(@item.Id)" type="button" >Güncelle</button>
+            </td>
             </tr>
         }
-
     </tbody>
 </table>
 
@@ -37,25 +37,38 @@
       <form method="POST" action="/Home/AddCategory" autocomplete="off">
       <div class="modal-body">
         <div class="form-group">
-            <input type="hidden" name="Id" class="form-control">
-            <input type="text" name="Name" class="form-control">
+            <input type="hidden" name="Id" id="Id" class="form-control">
+            <input type="text" name="Name" id="Name" class="form-control">
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-        <button id="deleteBtn" type="submit" class="btn btn-primary">Ekle</button>
-        <button id="updateBtn" type="submit" class="btn btn-primary">Güncelle</button>
+        <button type="button" class="btn btn-secondary" onclick="clearForm()" data-dismiss="modal">Kapat</button>
+        <button type="submit" id="saveBtn" class="btn btn-primary">Ekle</button>
+        <button type="submit" id="updateBtn" class="btn btn-primary">Güncelle</button>
       </div>
       </form>
     </div>
   </div>
 </div>
-
 @section Scripts{
   <script>
-
-    function updateForm(name){
-      console.log(name.toString());
+    $(() => clearForm())
+    function updateForm(Id){
+      fetch('/Home/CategoryDetails?Id='+Id)
+      .then(res => res.json())
+      .then(res =>{
+          $('#Id').val(res.id)
+          $('#Name').val(res.name)
+      })
+      $('#saveBtn').hide();
+       $('#updateBtn').show();
+      $('#CategoryModal').modal('show');
+    }
+    function clearForm(){
+        $('#Id').val(null)
+          $('#Name').val(null)
+       $('#saveBtn').show();
+       $('#updateBtn').hide();
     }
   </script>
 }
