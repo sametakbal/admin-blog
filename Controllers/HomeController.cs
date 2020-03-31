@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AdminBlog.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace AdminBlog.Controllers
 {
@@ -18,6 +19,20 @@ namespace AdminBlog.Controllers
         {
             _logger = logger;
             _context = context;
+        }
+
+        public IActionResult Login(string Email, string Password)
+        {
+            var author = _context.Author.FirstOrDefault(w => w.Email == Email && w.Password == Password);
+            if (author == null)
+            {
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            HttpContext.Session.SetInt32("id",author.Id);
+
+            return RedirectToAction(nameof(Category));
         }
 
         public async Task<IActionResult> AddCategory(Category category)
