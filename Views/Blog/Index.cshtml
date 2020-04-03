@@ -1,0 +1,53 @@
+<form method="POST" id="form">
+    <div class="form-group">
+        <input type="text" class="form-control" id="title" placeholder="Başlık">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="subtitle" placeholder="Alt Başlık">
+    </div>
+    <div id="summernote">
+
+    </div>
+    <div class="form-group">
+        <input type="file" class="form-control" name="ImagePath">
+    </div>
+    @Html.DropDownList("Categories",null,"Bir kategori seçiniz!",new {@class="form-control"})
+    <br/>
+    <div class="btn-group-toggle">
+        <button type="button" onclick="Save()" class="btn btn-primary">Kaydet</button>
+    </div>
+
+</form>
+
+@section Scripts{
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote();
+    });
+
+    function Save() {
+        var title = document.getElementById("title");
+        var subtitle = document.getElementById("subtitle");
+        var content = $('#summernote').summernote('code');
+        var category = document.getElementById("Categories");
+        var form = document.getElementById("form");
+
+        var formData = new FormData(form);
+        formData.append("title", title.value);
+        formData.append("subtitle", subtitle.value);
+        formData.append("content", content);
+        formData.append("categoryid", category.value);
+
+        var url = '/Blog/Save';
+
+        fetch(url, {
+                method: 'POST',
+                body: formData
+            }).then(res => res.json())
+            .then(result => {
+                alert("Blog Kaydedildi!");
+            })
+    }
+</script>
+}
