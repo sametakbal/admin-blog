@@ -9,9 +9,11 @@ using AdminBlog.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
+using AdminBlog.Filter;
 
 namespace AdminBlog.Controllers
 {
+    [UserFilter]
     public class BlogController : Controller
     {
         private readonly ILogger<BlogController> _logger;
@@ -47,10 +49,11 @@ namespace AdminBlog.Controllers
             ).ToList();
             return View();
         }
+        [HttpPost]
         public async Task<IActionResult> Save(Blog model){
             if(model != null){
                 var file = Request.Form.Files.First();
-                string savePath = Path.Combine("C:","Users","samet","Youtube","MyBlog","wwwroot","img");
+                string savePath = Path.Combine("C:","Users","samet","Youtube","MyBlog","wwwroot","images");
                 var fileName = $"{DateTime.Now:MMddHHmmss}.{file.FileName.Split(".").Last()}";
                 var fileUrl = Path.Combine(savePath,fileName);
                 using(var fileStream = new FileStream(fileUrl,FileMode.Create)){

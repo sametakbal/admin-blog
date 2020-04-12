@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AdminBlog.Models;
 using Microsoft.AspNetCore.Http;
+using AdminBlog.Filter;
 
 namespace AdminBlog.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -99,6 +101,12 @@ namespace AdminBlog.Controllers
             _context.Remove(author);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Author));
+        }
+
+        public IActionResult LogOut(){
+
+            HttpContext.Session.Clear();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Index()
